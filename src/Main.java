@@ -31,13 +31,19 @@ public class Main {
 
 		// Score the first page as the key
 		AnswerSheet key = markReader.processPageImage(images.get(0));
-
-		for (int i = 1; i < images.size(); i++) {
-			PImage image = images.get(i);
-
-			AnswerSheet answers = markReader.processPageImage(image);
-
-			// do something with answers
+		
+		ArrayList<String> results = key.getAnswers();
+		
+		for(int i = 0; i < results.size(); i++){
+			System.out.println(results.get(i));
 		}
+
+//		for (int i = 1; i < images.size(); i++) {
+//			PImage image = images.get(i);
+//
+//			AnswerSheet answers = markReader.processPageImage(image);
+//
+//			// do something with answers
+//		}
 	}
 }

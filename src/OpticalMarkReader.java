@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import processing.core.PImage;
 
 /***
@@ -12,7 +14,77 @@ public class OpticalMarkReader {
 	 * @return
 	 */
 	public AnswerSheet processPageImage(PImage image) {
+		ArrayList<String> answers = new ArrayList<String>();
 		
-		return null;
+		int width = 194;
+		int height = 37;
+		int initialXCorner = 122;
+		int initialYCorner = 459;
+		int xIncrement = 283;
+		
+		image.loadPixels();
+		int[] initialPixels = image.pixels;
+		
+		int imageHeight = image.height;
+		int imageLength = image.width;
+		
+		int[][] pixels = new int[imageHeight][imageLength];
+		int arrCounter = 0;
+		
+		for(int i = 0; i < pixels.length; i++){
+			for(int j = 0; j < pixels[0].length; j++){
+				int temp = initialPixels[arrCounter];
+				pixels[i][j] = temp&255;
+				arrCounter++;
+			}
+		}
+		
+		for(int column = 0; column < 4; column++){
+			int xCorner = initialXCorner + (column*xIncrement);
+			for(int row = 0; row < 25; row++){
+				int yCorner = initialYCorner + (row*height);
+				String thisAnswer = determineBubble(xCorner, yCorner, width, height, pixels);
+				answers.add(thisAnswer);
+			}
+		}
+		
+		AnswerSheet currentPageAnswers = new AnswerSheet(answers);
+		
+		return currentPageAnswers;
 	}
+	
+	public String determineBubble(int r, int c, int width, int height, int[][] pixels){
+		String[] answerChoices = {"A", "B", "C", "D", "E"};
+		int sectionWidth = (int)(width/5.0);
+		int darkest = 0;
+		int currentSection = 0;
+		int mostDarkPixels = -1;
+		System.out.println(pixels.length + ", " + pixels[0].length);
+		System.out.println("running determine bubble");
+		for(int s = c; s < c + width - 1; s += sectionWidth){
+			int numDarkPixels = 0;
+			for(int i = r; i < r+height; i++){
+				for(int j = s; j < s+sectionWidth; j++){
+					numDarkPixels += isDark(i, j, pixels);
+				}
+			}
+			System.out.println(numDarkPixels);
+			if(numDarkPixels > mostDarkPixels){
+				mostDarkPixels = numDarkPixels;
+				darkest = currentSection;
+			}
+			currentSection++;
+		}
+		return answerChoices[darkest];
+	}
+ 
+	private int isDark(int r, int c, int[][] arr) {
+		int thisPixel = arr[r][c];
+		if(thisPixel < (255/2.0))return 1;
+		return 0;
+	}
+	
 }
+
+
+	
