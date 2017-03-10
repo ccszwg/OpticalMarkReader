@@ -39,11 +39,15 @@ public class OpticalMarkReader {
 			}
 		}
 		
+		//alternates over 5 columns on answer sheet
 		for(int column = 0; column < 4; column++){
 			int xCorner = initialXCorner + (column*xIncrement);
+			//alternates over each of 25 problems on each column on answer sheet
 			for(int row = 0; row < 25; row++){
 				int yCorner = initialYCorner + (row*height);
+				//System.out.println("Checking rectangle from " + xCorner + ", " + yCorner + " to " + (xCorner+width) + ", " + (yCorner+height));
 				String thisAnswer = determineBubble(xCorner, yCorner, width, height, pixels);
+				
 				answers.add(thisAnswer);
 			}
 		}
@@ -59,21 +63,21 @@ public class OpticalMarkReader {
 		int darkest = 0;
 		int currentSection = 0;
 		int mostDarkPixels = -1;
-		System.out.println(pixels.length + ", " + pixels[0].length);
-		System.out.println("running determine bubble");
-		for(int s = c; s < c + width - 1; s += sectionWidth){
+		//System.out.println(pixels.length + ", " + pixels[0].length);
+		
+		for(int s = r; s < r + width; s += sectionWidth){
 			int numDarkPixels = 0;
 			for(int i = r; i < r+height; i++){
 				for(int j = s; j < s+sectionWidth; j++){
 					numDarkPixels += isDark(i, j, pixels);
 				}
 			}
-			System.out.println(numDarkPixels);
 			if(numDarkPixels > mostDarkPixels){
 				mostDarkPixels = numDarkPixels;
 				darkest = currentSection;
 			}
 			currentSection++;
+			if (currentSection > 4)return answerChoices[darkest];
 		}
 		return answerChoices[darkest];
 	}

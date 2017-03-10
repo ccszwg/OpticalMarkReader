@@ -49,7 +49,7 @@ public class VisualTester extends PApplet {
 				for(int j = 0; j < 12; j++){
 					int rectY = topCornerY + (j*height);
 					rect(topCornerX + (xIncrement*i), rectY, width, height);
-					System.out.println("Top corner of rectangle: " + (topCornerX + (xIncrement*i)) + ", " + rectY);
+					//System.out.println("Top corner of rectangle: " + (topCornerX + (xIncrement*i)) + ", " + rectY);
 					for(int s = 1; s < 5; s++){
 						line(topCornerX + (section*s) + (xIncrement*i), rectY, topCornerX + (section*s) + (xIncrement*i), rectY+height);
 					}

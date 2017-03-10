@@ -20,4 +20,8 @@ public class AnswerSheet {
 	public ArrayList<String> getAnswers(){
 		return this.answers;
 	}
+	
+	public String getAnswer(int i){
+		return this.answers.get(i);
+	}
 }
